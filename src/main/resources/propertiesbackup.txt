@@ -1,0 +1,6 @@
+spring.application.name=springboot-fundamentals
+
+
+#cores
+spring.output.ansi.enabled=always
+spring.output.ansi.charset=UTF-8

@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ class StudentServiceTest {
     }
 
     @Test
-    public void shouldSuccessfullySaveAStudent(){
+    public void shouldSuccessfullySaveAStudent() {
         //given
         StudentDto dto = new StudentDto("John", "Nada", "john@nada.com", 1);
         Student student = new Student("John", "Nada", "john@nada.com", 2);
@@ -68,7 +69,7 @@ class StudentServiceTest {
     }
 
     @Test
-    public void shouldReturnStudentList(){
+    public void shouldReturnStudentList() {
         //given
         List<Student> students = new ArrayList<>();
         students.add(new Student("John", "Nada", "john@nada.com", 2));
@@ -88,7 +89,7 @@ class StudentServiceTest {
     }
 
     @Test
-    public void shouldFindStudentById(){
+    public void shouldFindStudentById() {
         //given
         Integer id = 1;
         Student student = new Student("John", "Nada", "john@nada.com", 2);
@@ -107,11 +108,10 @@ class StudentServiceTest {
         assertEquals(dto.getEmail(), student.getEmail());
 
         verify(repository, times(1)).findById(id);
-
     }
 
     @Test
-    public void shouldFindStudentByName (){
+    public void shouldFindStudentByName() {
         //given
         List<Student> students = new ArrayList<>();
         students.add(new Student("John", "Nada", "john@nada.com", 2));
@@ -124,10 +124,25 @@ class StudentServiceTest {
         //when
         List<StudentResponseDto> responseDtos = studentService.findStudentByName(anyString());
 
-
-
         //then
         assertEquals(students.size(), responseDtos.size());
+    }
+
+    @Test
+    public void shouldDeleteStudent(){
+        //given
+        Integer id = 1;
+        Student student = new Student("John", "Nada", "john@nada.com", 2);
+
+        //mock calls
+        when(repository.findById(id)).thenReturn(Optional.of(student));
+
+        //when
+        repository.delete(student);
+
+        //then
+        verify(repository, times(1)).delete(student);
+
 
     }
 }
